@@ -5,9 +5,7 @@ module.exports = Controller("Home/BaseController", function () {
             var self = this;
             var myPost = this.post();
             var selector = [];
-            myPost.isPagination = !!myPost.page ? 1 : 0;
             myPost.mode = 'web';
-            delete myPost.page;
 
             D('config').thenAdd(myPost, {configName: myPost.configName}, true).then(function (rt) {
                 if (rt.type == 'exist') {
