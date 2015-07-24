@@ -2,6 +2,7 @@ module.exports = Controller(function () {
     //websocket列表
     var wsList = {};
     setInterval(function () {
+        console.log(Object.keys(wsList));
         for (var id in wsList) {
             wsList[id].send({
                 name: '机器人',
