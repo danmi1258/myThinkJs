@@ -5,19 +5,15 @@ module.exports = Controller("Home/BaseController", function () {
             var self = this;
             var myPost = this.post();
             var selector = [];
-            JSON.parse(myPost.levels).forEach(function (element, index) {
-                selector.push({
-                    $: element.selector,
-                    attr: element.attr
-                });
-            });
-            myPost.selector = JSON.stringify(selector);
             myPost.isPagination = !!myPost.page ? 1 : 0;
             myPost.mode = 'web';
             delete myPost.page;
-            delete myPost.levels;
 
-            D('config').thenAdd(myPost, {configName: myPost.configName}).then(function (id) {
+            D('config').thenAdd(myPost, {configName: myPost.configName}, true).then(function (rt) {
+                if (rt.type == 'exist') {
+                    D('config').where({configName: myPost.configName}).update(myPost).then(function(affectedRows){
+                    });
+                }
                 var result = {
                     status: true,
                     info: "保存成功",
@@ -27,13 +23,25 @@ module.exports = Controller("Home/BaseController", function () {
             });
         },
         deleteAction: function () {
-            this.end('add');
+            var self = this;
+            var configName = this.get('name');
+            D('config').where({configName: configName}).delete().then(function (affectedRows) {
+                var result = {
+                    status: true,
+                    info: "删除成功",
+                    error: null
+                };
+                return self.json(result);
+            });
         },
         editAction: function () {
             var self = this;
             var configName = this.get('name');
             D('config').where({configName: configName}).find().then(function (data) {
-                //data.selector = JSON.parse(data.selector);
+                if (!isEmpty(data.levels)) {
+                    data.levels = JSON.parse(data.levels);
+                }
+                console.log(data.selector);
                 var result = {
                     status: true,
                     data: data,
