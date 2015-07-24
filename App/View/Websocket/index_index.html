@@ -37,7 +37,7 @@
 </div>
 <script>$(function () {
     function n() {
-        var e = new WebSocket("ws://" + location.hostname + ":3000/index/open"), n = $.Deferred();
+        var e = new WebSocket("ws://" + location.hostname + ":3000/websocket/index/open"), n = $.Deferred();
         return e.onopen = function (r) {
             $('<div class="alert alert-success">\u8fde\u63a5\u6210\u529f\uff0c\u5f00\u59cb\u804a\u5929\u5427 ^_^</div>').appendTo(i), n.resolve(e), e.onmessage = function (e) {
                 var n = JSON.parse(e.data).result;
@@ -59,7 +59,7 @@
         var e = s.val().trim();
         if (!e)return s.focus();
         r.then(function (t) {
-            s.val("").focus(), t.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params: {text: e}, id: 1}))
+            s.val("").focus(), t.send(JSON.stringify({jsonrpc: "2.0", method: "/websocket/index/message", params: {text: e}, id: 1}))
         })
     })
 })</script>
