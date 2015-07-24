@@ -4,7 +4,6 @@ module.exports = Controller("Home/BaseController", function () {
         addAction: function () {
             var self = this;
             var myPost = this.post();
-            var selector = [];
             myPost.mode = 'web';
 
             D('config').thenAdd(myPost, {configName: myPost.configName}, true).then(function (rt) {
