@@ -44,8 +44,7 @@ module.exports = Controller("Home/BaseController", function () {
                 console.log(data.selector);
                 var result = {
                     status: true,
-                    data: data,
-                    configName: data.configName
+                    data: data
                 };
                 return self.json(result);
             });
