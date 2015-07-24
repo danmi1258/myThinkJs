@@ -1,11 +1,12 @@
-﻿var ws = new WebSocket('ws://127.0.0.1:' + port);
+﻿var ws = new WebSocket('ws://' + location.hostname + ':' + port + '/index/open');
 
 ws.onopen = function () {
     console && console.info && console.info('websocket建立连接成功');
 };
 
 ws.onmessage = function (e) {
-    var data = $.parseJSON(e.data);
+    var json = $.parseJSON(e.data);
+    var data = json.result;
     $("#LogList").prepend('<li class="' + data.color + '">' + data.info + '</li>');
     /// 停止执行
     data.status === 0 && setTimeout(function () {
@@ -202,15 +203,15 @@ exec.start = function () {
     setTimeout(function () {
         loglist.show();
         /// 执行ws
-        ws.send(JSON.stringify({
+        ws.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params:{
             action: 'start',
             config: configname
-        }));
+        }}));
     }, 600);
     btn.one("click", function () {
-        ws.send(JSON.stringify({
+        ws.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params:{
             action: 'stop'
-        }));
+        }}));
     });
 }
 
