@@ -59,7 +59,7 @@
         var e = s.val().trim();
         if (!e)return s.focus();
         r.then(function (t) {
-            s.val("").focus(), t.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params: {text: e}, id: 1})), t.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params: {score: [1, 2, 3, 4]}, id: 1}))
+            s.val("").focus(), t.send(JSON.stringify({jsonrpc: "2.0", method: "/index/message", params: {text: e}, id: 1}))
         })
     })
 })</script>
