@@ -13,9 +13,10 @@ var config;
 var rooturl;
 var rootsite;
 var hostname;
+var worker;
 
 module.exports = Controller("Home/BaseController", function () {
-    var worker;
+    "use strict";
     return {
         indexAction: function () {
             var self = this;
@@ -88,6 +89,17 @@ module.exports = Controller("Home/BaseController", function () {
 var Crawler = function () {
     this.from = config.from || 1;
     this.to = config.to || 1;
+};
+
+/// 输出信息
+Crawler.prototype.log = function (info, c) {
+    var that = this;
+    if (config.mode === 'web') {
+        /// 发送数据给主进程
+        process.send({ color: c || 'red', info: info });
+    } else if (config.mode === 'console') {
+        console.log(color(c), info);
+    }
 };
 
 /// 开始处理的入口
@@ -365,18 +377,6 @@ Crawler.prototype.title = function (str) {
         title = title.match(/(.+)\-[^\-]+$/)[1].trim();
     }
     return title;
-};
-
-/// 输出信息
-Crawler.prototype.log = function (info, c) {
-    //console.log(info);
-    var that = this;
-    if (config.mode === 'web') {
-        /// 发送数据给主进程
-        process.send(JSON.stringify({ color: c || '', info: info }));
-    } else if (config.mode === 'console') {
-        console.log(color(c), info);
-    }
 };
 
 String.prototype.format = function () {
