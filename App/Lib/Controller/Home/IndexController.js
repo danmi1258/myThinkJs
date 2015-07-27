@@ -134,7 +134,7 @@ Crawler.prototype.crawl = function () {
                 }, function (_callback) {
                     that.request(rooturl(i), function (status, $) {
                         if (status) {
-                            var $$ = eval(item.$);
+                            var $$ = eval(item.selector);
                             $$.each(function () {
                                 var nextUrl = $(this).attr(item.attr);
                                 if (!/^http:\/\//i.test(nextUrl)) {
@@ -169,7 +169,7 @@ Crawler.prototype.crawl = function () {
                 console.log(rooturl);
                 that.request(rooturl, function (status, $) {
                     if (status) {
-                        eval(item.$).each(function () {
+                        eval(item.selector).each(function () {
                             urlLevels[0].push($(this).attr(item.attr));
                         });
                     } else {
@@ -185,7 +185,7 @@ Crawler.prototype.crawl = function () {
             async.eachSeries(urlLevels[index - 1], function (_item, _callback) {
                 that.request(_item, function (status, $) {
                     if (status) {
-                        eval(_item.$).each(function () {
+                        eval(_item.selector).each(function () {
                             urlLevels[index].push($(this).attr(_item.attr));
                         });
                     } else {
@@ -227,7 +227,7 @@ Crawler.prototype.text = function (urls) {
                         var title = that.title($("title").text());
                         var filepath = path.join(config.saveDir, hostname, title + '.txt');
                         var last = config.levels[config.levels.length - 1];
-                        var content = eval(last.$).text();
+                        var content = eval(last.selector).text();
                         fs.writeFile(filepath, content, { flag: 'wx' }, function (_err) {
                             if (_err) {
                                 if (_err.code === 'EEXIST') {
@@ -272,7 +272,7 @@ Crawler.prototype.image = function (urls) {
             var list = [];
             if (status) {
                 var last = config.levels[config.levels.length - 1];
-                var $$ = eval(last.$);
+                var $$ = eval(last.selector);
                 var len = $$.length;
                 if (len > 0) {
                     $$.each(function () {
