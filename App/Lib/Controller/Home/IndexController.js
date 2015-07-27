@@ -52,13 +52,24 @@ module.exports = Controller("Home/BaseController", function () {
 
                 /// 将要使用的配置文件名传送给子进程
                 worker.send(message.config);
+
+                //debug
+                worker.stdout.setEncoding('utf8');
+                worker.stdout.on('data', function (data) {
+                    console.log('stdout data:', data);
+                });
+                worker.stderr.on('data', function (code) {
+                    if (code !== 0) {
+                        console.log('worker process exited with code ' + code);
+                    }
+                });
             } else if (message.action === "stop") {
                 worker.kill();
             }
         },
         childAction: function () {
             process.on('message', function (m) {
-                D('config').where({configName: configName}).find().then(function (data) {
+                D('config').where({configName: m}).find().then(function (data) {
                     if (!isEmpty(data.levels)) {
                         data.levels = JSON.parse(data.levels);
                     }
