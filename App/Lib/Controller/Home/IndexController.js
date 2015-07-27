@@ -109,11 +109,11 @@ Crawler.prototype.crawl = function () {
     var urlLevels = [];
     that.log('程序正在执行中...');
 
-    /// 通过config.selector的长度来确定页面的层线
-    async.eachSeries(config.selector, function (item, callback) {
-        var index = config.selector.indexOf(item);
+    /// 通过config.levels的长度来确定页面的层线
+    async.eachSeries(config.levels, function (item, callback) {
+        var index = config.levels.indexOf(item);
         /// 最后一层级
-        if (index === config.selector.length - 1) {
+        if (index === config.levels.length - 1) {
             if (config.type) {
                 if (that[config.type]) {
                     that[config.type](urlLevels[index - 1]);
@@ -127,7 +127,7 @@ Crawler.prototype.crawl = function () {
         /// 第一层级
         else if (index === 0) {
             urlLevels[0] = [];
-            if (config.isPagination) {
+            if (config.page) {
                 var i = config.from;
                 async.whilst(function () {
                     return i <= config.to;
@@ -166,6 +166,7 @@ Crawler.prototype.crawl = function () {
                     callback(null);
                 });
             } else {
+                console.log(rooturl);
                 that.request(rooturl, function (status, $) {
                     if (status) {
                         eval(item.$).each(function () {
@@ -225,7 +226,7 @@ Crawler.prototype.text = function (urls) {
                     if (status) {
                         var title = that.title($("title").text());
                         var filepath = path.join(config.saveDir, hostname, title + '.txt');
-                        var last = config.selector[config.selector.length - 1];
+                        var last = config.levels[config.levels.length - 1];
                         var content = eval(last.$).text();
                         fs.writeFile(filepath, content, { flag: 'wx' }, function (_err) {
                             if (_err) {
@@ -270,7 +271,7 @@ Crawler.prototype.image = function (urls) {
             /// 存储图片路径
             var list = [];
             if (status) {
-                var last = config.selector[config.selector.length - 1];
+                var last = config.levels[config.levels.length - 1];
                 var $$ = eval(last.$);
                 var len = $$.length;
                 if (len > 0) {
