@@ -48,7 +48,7 @@ module.exports = Controller("Home/BaseController", function () {
                     _ws.send(data);
                 });
                 worker.on("close", function (code, signal) {
-                    !code && _ws.send(JSON.stringify({ color: 'redBG', info: !signal ? '执行完毕' : '已手动停止抓取', status: 0 }));
+                    !code && _ws.send({ color: 'redBG', info: !signal ? '执行完毕' : '已手动停止抓取', status: 0 });
                 });
 
                 /// 将要使用的配置文件名传送给子进程
