@@ -81,7 +81,6 @@ module.exports = Controller("Home/BaseController", function () {
                     new Crawler().crawl();
                 });
             });
-            process.send({ color: 'red', info: 'starting...' });
         }
     };
 });
